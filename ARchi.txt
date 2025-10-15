@@ -1,0 +1,99 @@
+Voici des solutions détaillées pour chacun des devoirs :
+
+---
+
+### **Devoir 1**
+
+Étant donné une représentation des nombres flottants avec :
+- **1 bit pour le signe** \( (s) \),
+- **4 bits pour l'exposant biaisé** \( (e) \),
+- **8 bits pour la mantisse** \( (m) \),
+
+la formule pour obtenir un nombre est :  
+\[
+(-1)^s \times (1 + \text{mantisse}) \times 2^{\text{exposant biaisé} - \text{biais}}
+\]
+
+1. **Exposant et biais** :  
+   - Avec 4 bits pour l'exposant, les valeurs possibles de l'exposant non biaisé vont de 0 à 15.
+   - Si on utilise un biais de 7 (convention la plus courante pour 4 bits), cela donne un **exposant biaisé allant de -7 à +8**.
+
+2. **Mantisse** :  
+   - Avec 8 bits, la mantisse prend des valeurs binaires de `00000000` (0) à `11111111` (255).
+   - La mantisse normalisée, en ajoutant le bit implicite, sera dans l'intervalle de \(1 \leq 1 + m < 2\).
+
+3. **Calculs des valeurs limites** :
+   - **Plus grand nombre positif** : signe = 0, exposant = 8 (exposant maximum), mantisse = 255.
+     \[
+     (1 + 0.99609375) \times 2^8 = 1.99609375 \times 256 \approx 511
+     \]
+   - **Plus petit nombre positif** : signe = 0, exposant = -6 (exposant minimum non nul), mantisse = 0.
+     \[
+     (1 + 0) \times 2^{-6} = 1 \times \frac{1}{64} = 0.015625
+     \]
+   - **Plus grand nombre négatif** : même que le plus grand positif mais avec signe = 1.
+     \[
+     -511
+     \]
+   - **Plus petit nombre négatif** : même que le plus petit positif mais avec signe = 1.
+     \[
+     -0.015625
+     \]
+
+---
+
+### **Devoir 2**
+
+Pour déterminer la représentation en virgule flottante de votre ordinateur :
+
+1. **Convention IEEE 754 (norme la plus courante)** :
+   - **1 bit pour le signe**,
+   - **8 bits pour l'exposant biaisé** (biais de 127),
+   - **23 bits pour la mantisse**.
+
+2. Cette convention suit la formule :
+   \[
+   (-1)^s \times (1 + \text{mantisse}) \times 2^{\text{exposant biaisé} - 127}
+   \]
+
+3. **Autres conventions** :
+   - En général, si vous utilisez un système avec IEEE 754, il est conforme à cette norme.
+   - Dans certains cas (architectures spécifiques), une autre représentation peut être utilisée, mais c’est rare pour les systèmes modernes.
+
+---
+
+### **Devoir 3**
+
+En utilisant **32 bits avec la convention IEEE 754** (1 bit pour le signe, 8 bits pour l'exposant, 23 bits pour la mantisse) :
+
+1. **Plus grande valeur positive** (exposant max = 127, mantisse = 1 - epsilon) :
+   \[
+   (1 + (1 - 2^{-23})) \times 2^{127} \approx 3.4 \times 10^{38}
+   \]
+
+2. **Plus petite valeur positive normale** (exposant min = -126, mantisse = 1) :
+   \[
+   (1) \times 2^{-126} \approx 1.18 \times 10^{-38}
+   \]
+
+3. **Sous-normales (plus petite valeur positive sous-normale)** : quand l'exposant est à zéro.
+   \[
+   2^{-149} \approx 1.4 \times 10^{-45}
+   \]
+
+---
+
+### **Devoir 4**
+
+Pour une machine avec **1 bit pour le signe**, **4 bits pour l'exposant** et **8 bits pour la mantisse**, voici les valeurs maximales et minimales en tenant compte des représentations en CA2 et biaisée :
+
+1. **Exposant biaisé** :
+   - Exposant sur 4 bits avec biais de 7 (donc \( e_{\text{non biaisé}} = e - 7 \)).
+   - **Valeurs d’exposants biaisés** : de -7 à +8.
+  
+2. **Exposant CA2** :
+   - Exposant sur 4 bits en complément à deux, allant de -8 à +7.
+
+3. **Valeurs possibles pour chaque type d'exposant et mantisse en octal et hexadécimal** :
+   - Convertissez les valeurs binaires de la mantisse en octal et en hexadécimal.
+

@@ -1,0 +1,221 @@
+/* Style de fond de la fenêtre */
+window {
+    background-color: #37383b; /* Couleur de fond principale */
+    font-family: 'Tahoma', Tahoma, Geneva, Verdana, sans-serif; /* Police similaire à Windows */
+}
+
+/* style.css */
+notebook tab {
+    background-color: #464a4d; /* Couleur des onglets inactifs */
+    color: 20f5e0;
+    border: 1px #ffffff;
+    border-radius:  15px 15px 0px 0px;
+    width: 10px;
+    margin-right: 5px; 
+}
+
+notebook tab:active {
+    background-color: ##464a4d; /* Couleur de l'onglet actif */
+    border: 15px #ffffff;
+}
+
+/* Optionnel : couleur d'arrière-plan du contenu des pages */
+notebook > stack > * {
+    background-color: ##464a4d; /* Couleur des pages */
+    border:  #464a4d;
+}
+
+
+
+/* Style de fond pour la première page */
+#notebook-page-1 {
+    background-color: #464a4d; /* Couleur de fond de la première page */
+    border:#464a4d;
+}
+
+/* Style de fond pour la deuxième page */
+#notebook-page-2 {
+    background-color: #464a4d; /* Couleur de fond de la deuxième page */
+    border:  #464a4d;
+}
+
+/* Style de fond pour la troisième page */
+#notebook-page-3 {
+    background-color: #464a4d; /* Couleur de fond de la troisième page */
+    border:  #464a4d;
+    color: 20f5e0;
+}
+
+/* Style de fond pour la quatrième page */
+#notebook-page-4 {
+    background-color: #464a4d; /* Couleur de fond de la quatrième page */
+    border:  #464a4d;
+}
+
+
+/* Nom du fichier CSS, ex. 'style.css' */
+#box{
+    background: radial-gradient(circle, transparent 70%, rgba(0, 0, 0, 0.4) 100%);
+    background-color: #37383b;
+    border-radius: 50px;
+    border: 2px solid #37383b;
+    color: #ffffff;
+    padding: 20px;
+    width: 30px;
+    height: 20px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
+    margin: 50px;  /* Ajout de marges pour la vignette */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3), 10px 10px 10px rgba(0, 0, 0, 0.5); /* Ombres pour effet 3D */
+}
+
+#box-diag{
+    background: radial-gradient(circle, transparent 70%, rgba(0, 0, 0, 0.4) 100%);
+    background-color: #37383b;
+    border: 2px solid #37383b;
+    padding: 20px;
+    width: 30px;
+    height: 20px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
+    margin: 50px;  /* Ajout de marges pour la vignette */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3), 10px 10px 10px rgba(0, 0, 0, 0.5); /* Ombres pour effet 3D */
+}
+
+#entry {
+    margin-bottom: 10px; /* Espace de 15px entre les entrées */
+    border: 5px;
+    border-color: #000000;
+    border-radius:10px;
+    background-color:#464a4d;
+    color: #ffffff;
+}
+
+#label-synchro{
+    font-size : 15px;
+    font-family: 'Courier New';
+    color: #ffffff;
+    
+}
+
+
+/* Style du bouton 3D */
+#button-3D {
+    background: linear-gradient(145deg, #4a4b4e, #2d2e30); /* Dégradé bleu nuit */
+    padding: 15px 30px;
+    font-size: 18px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3), 0px 0px 2px rgba(255, 255, 255, 0.1); /* Ombres pour effet 3D */
+    transition: transform 0.2s ease, box-shadow 0.2s ease; /* Transition douce */
+}
+
+#button-3D.label {
+    color: #ffffff;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Ombre pour le texte */
+}
+
+#button-3D:hover {
+    color: #ffffff; /* Change la couleur du texte au survol */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4); /* Ombres plus marquées au survol */
+}
+
+#button-3D:active {
+    color: #ffffff; /* Change la couleur du texte lors du clic */
+    transform: translateY(5px); /* Déplacement vers le bas pour l’effet de pression */
+    box-shadow: inset 0px 2px 5px rgba(0, 0, 0, 0.5); /* Ombre interne lors du clic */
+}
+
+/* Style de la barre de progression */
+#progress-bar {
+    background-color: #464a4d; /* Couleur de fond */
+    min-height: 0px; /* Hauteur minimale */
+    border-radius: 4px; /* Coins arrondis */
+    border: 1px solid #464a4d; /* Bordure de la barre de progression */
+    box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.2); /* Ombre interne pour un effet de profondeur */
+    overflow: hidden; /* Masque l'animation au-delà des coins arrondis */
+}
+
+/* Dégradé animé de la barre de progression */
+#progress-bar progress {
+    background: linear-gradient(270deg, #4caf50, #1e88e5, #d81b60, #4caf50); /* Dégradé animé de couleurs */
+    background-size: 300% 100%; /* Taille du dégradé pour permettre le mouvement */
+    animation: progress-animation 4s ease-in-out infinite; /* Animation cyclique */
+    border-radius: 10px; /* Coins arrondis de la progression */
+    transition: width 0.5s ease; /* Transition douce lors de la progression */
+    height: 6px;
+}
+
+/* Animation pour déplacer le dégradé le long de la barre */
+@keyframes progress-animation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.grid-cells {
+    background-color:  #37383b;
+    border: 1px solid #d1d1d1;
+    border: #000000;
+    padding: 10px;
+    border-radius: 5px;
+    color: #ffffff;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+
+/* Appliquer une bordure aux cellules de la grille */
+/* Style des cellules de la grille */
+.grid-cell {
+    border: 1px solid #d1d1d1;
+    padding: 10px;
+    border: #000000;
+    border-radius: 5px;
+    background-color: #4a4b4e; /* Changez cette couleur à votre préférence */
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
+    color: #ffffff;
+}
+
+/* Optionnel : Couleur de fond différente pour les lignes alternées */
+.grid-cell:nth-child(even) {
+    background-color:#2d2e30; /* Couleur pour les lignes paires */
+}
+
+/* Style du tableau de la page 1 */
+#table-view {
+    color: #A9EAFE; /* Bleu clair */
+    border: 1px solid #d1d1d1; /* Bordure légère */
+    padding: 10px;
+    border-radius: 5px;
+    /*box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2); /* Ombre légère */
+}
+
+/* Style des lignes du tableau */
+#table-view > label {
+    background-color: #464a4d; /* Couleur de fond des lignes */
+    padding: 5px;
+    border-bottom: 1px solid #d1d1d1;
+    transition: background-color 0.2s; /* Transition douce pour l'effet de survol */
+}
+
+#table-view > label:hover {
+    background-color: #ffffff; /* Changement de couleur au survol */
+}
+
+#text-view {
+    background-color: #464a4d; 
+    border-radius: 10px; /* Coins arrondis pour une apparence plus douce */
+    padding: 10px; /* Espacement à l'intérieur */
+}
+
+#text-view {
+    background-color: #464a4d; /* Fond noir pour le texte */
+    color: #ffffff; /* Texte blanc */
+    padding: 10px; /* Espacement à l'intérieur */
+    border-radius: 5px; /* Coins arrondis */
+}
+#label-title{
+    color: #ffffff; 
+    font-size : 30px;
+    font-family : 'Courier New ', bold;
+
+}

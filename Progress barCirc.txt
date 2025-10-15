@@ -1,0 +1,128 @@
+#include <gtk/gtk.h>
+#include <semaphore.h>
+#include <unistd.h>
+#include <math.h>
+
+typedef struct {
+    GtkWidget *progress_area;  // Zone de dessin pour la barre circulaire
+    GtkWidget *status_label;
+    gchar *task_name;
+    gdouble fraction;
+    gint resource_percentage;
+    gint start_delay;
+    gboolean is_complete;
+    gdouble memory_time;
+} ThreadData;
+
+extern gint used_resources;
+extern sem_t resource_semaphore;
+
+static gboolean draw_circular_progress(GtkWidget *widget, cairo_t *cr, gpointer data) {
+    ThreadData *thread_data = (ThreadData *)data;
+
+    // Dimensions de la zone de dessin
+    gint width = gtk_widget_get_allocated_width(widget);
+    gint height = gtk_widget_get_allocated_height(widget);
+    gint radius = MIN(width, height) / 2 - 10;  // Taille de l'anneau
+    gint inner_radius = radius - 10;  // Rayon intérieur pour l'effet d'anneau
+
+    // Position centrale de l'anneau
+    gint xc = width / 2;
+    gint yc = height / 2;
+
+    // Dessine l'anneau de fond
+    cairo_set_source_rgb(cr, 0.9, 0.9, 0.9);  // Couleur grise pour le fond
+    cairo_arc(cr, xc, yc, radius, 0, 2 * M_PI);
+    cairo_fill(cr);
+
+    // Dessine l'anneau de progression
+    cairo_set_source_rgb(cr, 0.125, 0.961, 0.878);  // Couleur bleue pour la progression
+    cairo_arc(cr, xc, yc, radius, -M_PI_2, -M_PI_2 + 2 * M_PI * thread_data->fraction);
+    cairo_line_to(cr, xc, yc);  // Ferme le chemin
+    cairo_fill(cr);
+
+    // Dessine l'anneau intérieur (transparent)
+    cairo_set_source_rgb(cr, 0.9, 0.9, 0.9);  // Couleur grise pour le fond
+    cairo_arc(cr, xc, yc, inner_radius, 0, 2 * M_PI);
+    cairo_fill(cr);
+
+    // Affichage du texte de progression
+    gchar *progress_text = g_strdup_printf("%.0f%%", thread_data->fraction * 100);
+    cairo_set_source_rgb(cr, 0, 0, 0);  // Noir pour le texte
+    cairo_select_font_face(cr, "Sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD);
+    cairo_set_font_size(cr, 14);
+
+    // Centrer le texte
+    cairo_text_extents_t extents;
+    cairo_text_extents(cr, progress_text, &extents);
+    cairo_move_to(cr, xc - extents.width / 2, yc + extents.height / 2);
+    cairo_show_text(cr, progress_text);
+    g_free(progress_text);
+
+    return FALSE;
+}
+
+// Fonction pour la mise à jour de la barre de progression circulaire
+static gboolean update_progress_bar(gpointer data) {
+    ThreadData *thread_data = (ThreadData *)data;
+
+    if (GTK_IS_DRAWING_AREA(thread_data->progress_area)) {
+        gtk_widget_queue_draw(thread_data->progress_area);  // Redessine la zone de dessin
+    } else {
+        g_warning("Progress area non valide !");
+        return G_SOURCE_REMOVE;
+    }
+
+    if (thread_data->fraction >= 1.0 && !thread_data->is_complete) {
+        thread_data->is_complete = TRUE;
+        gchar *message = g_strdup_printf("Processus terminé: Liberation de la ressource par le processus: %s\n", thread_data->task_name);
+        append_task_message(thread_data, message);
+        g_free(message);
+
+        gtk_label_set_text(GTK_LABEL(thread_data->status_label), "Fait");  // Mise à jour de l'état en "Fait"
+
+        used_resources -= thread_data->resource_percentage;  // Libération des ressources
+        sem_post(&resource_semaphore);
+
+        return G_SOURCE_REMOVE;
+    }
+
+    return G_SOURCE_CONTINUE;
+}
+
+// Fonction pour la simulation de traitement
+static void* simulate_thread_processing(void *data) {
+    ThreadData *thread_data = (ThreadData *)data;
+
+    // Attente du délai de démarrage si nécessaire
+    if (thread_data->start_delay > 0) {
+        sleep(thread_data->start_delay);
+    }
+    gtk_label_set_text(GTK_LABEL(thread_data->status_label), "En cours");
+
+    gchar *message = g_strdup_printf("Processus démarré: Récupération de la ressource par ce processus : %s\n", thread_data->task_name);
+    append_task_message(thread_data, message);
+    g_free(message);
+
+    for (int i = 0; i <= 100; i++) {
+        thread_data->fraction = i / 100.0;
+        g_idle_add(update_progress_bar, thread_data);
+        usleep(50000 * thread_data->memory_time);  // Simuler le temps d'attente
+    }
+
+    return NULL;
+}
+
+// Fonction pour initialiser la zone de dessin et ses signaux
+void init_circular_progress_bar(ThreadData *thread_data, GtkWidget *parent_box) {
+    // Création et configuration de la zone de dessin pour l'anneau
+    thread_data->progress_area = gtk_drawing_area_new();
+    gtk_widget_set_size_request(thread_data->progress_area, 80, 80);  // Ajuster la taille de l'anneau
+
+    // Connecte le signal de dessin
+    g_signal_connect(G_OBJECT(thread_data->progress_area), "draw", G_CALLBACK(draw_circular_progress), thread_data);
+
+    // Ajoute la zone de dessin dans le conteneur parent
+    gtk_box_pack_start(GTK_BOX(parent_box), thread_data->progress_area, FALSE, FALSE, 0);
+    gtk_widget_show(thread_data->progress_area);
+}
